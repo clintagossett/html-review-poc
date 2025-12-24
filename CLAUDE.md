@@ -59,14 +59,73 @@ Subtasks are smaller units of work within a task. They live inside the task fold
 ```
 tasks/00001-first-task/
 ├── README.md
-├── 01-subtask-name/
+├── 01-subtask-descriptive-name/
 │   └── README.md
-├── 02-another-subtask/
+├── 02-subtask-another-name/
 │   └── README.md
 └── output/
 ```
 
 - Use 2-digit numbering (01, 02, etc.)
-- Format: `##-subtask-name-here`
+- Format: `##-subtask-descriptive-name`
 - Each subtask has its own `README.md`
 - Subtasks are ordered/stacked numerically
+
+## Documentation System
+
+Documentation lives in `docs/` and uses an `_index.md` convention for efficient navigation.
+
+### Structure
+
+```
+docs/
+├── _index.md                    # Docs home/overview
+├── personas/
+│   ├── _index.md                # Personas overview
+│   └── *.md                     # Individual personas
+├── journeys/
+│   ├── _index.md                # Journeys overview
+│   └── *.md                     # Individual journeys
+├── architecture/
+│   ├── _index.md                # Architecture overview
+│   └── decisions/
+│       ├── _index.md            # ADR index
+│       └── 0001-*.md            # Individual ADRs
+└── design/
+    ├── _index.md                # Design overview
+    └── *.md                     # Design documents
+```
+
+### _index.md Strategy
+
+**For Claude:**
+- ALWAYS start by reading `docs/_index.md` to understand documentation structure
+- Use `_index.md` files to navigate — they contain summaries and links to detail docs
+- Only read individual docs when specific detail is needed
+- This minimizes context bloat
+
+**When updating docs:**
+- ALWAYS update the relevant `_index.md` when adding/removing/modifying documents
+- Keep `_index.md` files as accurate tables of contents
+- Include brief descriptions in index entries so Claude can decide if it needs the full doc
+
+## Technology Stack
+
+- **Backend:** Convex
+- **Reference Designs:** `figma-designs/` (git submodule, read-only)
+
+## Convex Backend Rules
+
+**MANDATORY:** When working on backend code or any changes that touch Convex:
+
+1. **Read the rules first:** Always read `docs/architecture/convex-rules.md` before making any Convex changes
+2. **Strict adherence:** Follow ALL guidelines in the Convex rules document — no exceptions
+3. **Key requirements:**
+   - Use new function syntax with `args`, `returns`, and `handler`
+   - ALWAYS include argument and return validators (use `v.null()` for void returns)
+   - Use `internalQuery`/`internalMutation`/`internalAction` for private functions
+   - Do NOT use `filter` in queries — use indexes with `withIndex`
+   - Schema defined in `convex/schema.ts`
+   - Actions cannot access `ctx.db`
+
+Failure to follow these rules will result in broken or insecure code.

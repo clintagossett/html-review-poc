@@ -1,0 +1,3 @@
+[submodule "figma-designs"]
+	path = figma-designs
+	url = git@github.com:clintagossett/Figmamakeprotocollaborativehtmlreview.git
