@@ -18,7 +18,7 @@ const schema = defineSchema({
     // Add username field for user-friendly display
     username: v.optional(v.string()),
   })
-    .index("by_email", ["email"])
+    .index("email", ["email"])  // Required by Convex Auth for email providers
     .index("by_username", ["username"]),
 });
 

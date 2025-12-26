@@ -1,10 +1,55 @@
 import { convexAuth, getAuthUserId } from "@convex-dev/auth/server";
 import { Password } from "@convex-dev/auth/providers/Password";
 import { Anonymous } from "@convex-dev/auth/providers/Anonymous";
+import { Email } from "@convex-dev/auth/providers/Email";
 import { query } from "./_generated/server";
 
+// Configure Email provider with Resend for magic links
+const MagicLinkEmail = Email({
+  id: "resend",
+  // Magic link behavior: only token is needed, no email verification required on callback
+  authorize: undefined,
+  async sendVerificationRequest({ identifier, url }) {
+    const { Resend } = await import("resend");
+    const resend = new Resend(process.env.AUTH_RESEND_KEY);
+
+    await resend.emails.send({
+      from: "Artifact Review <onboarding@resend.dev>",
+      to: identifier,
+      subject: "Sign in to Artifact Review",
+      html: `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset="utf-8">
+            <title>Sign in to Artifact Review</title>
+          </head>
+          <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+            <h1 style="color: #333; font-size: 24px;">Sign in to Artifact Review</h1>
+            <p style="color: #666; font-size: 16px; line-height: 1.5;">
+              Click the button below to sign in to your account. This link will expire in 10 minutes.
+            </p>
+            <a href="${url}" style="display: inline-block; background-color: #000; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-size: 16px; margin: 20px 0;">
+              Sign in to Artifact Review
+            </a>
+            <p style="color: #999; font-size: 14px;">
+              If you didn't request this email, you can safely ignore it.
+            </p>
+            <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
+            <p style="color: #999; font-size: 12px;">
+              This link expires in 10 minutes. If the button doesn't work, copy and paste this URL into your browser:
+              <br>
+              <a href="${url}" style="color: #666;">${url}</a>
+            </p>
+          </body>
+        </html>
+      `,
+    });
+  },
+});
+
 export const { auth, signIn, signOut, store, isAuthenticated } = convexAuth({
-  providers: [Password, Anonymous],
+  providers: [Password, Anonymous, MagicLinkEmail],
 });
 
 export const getCurrentUser = query({

@@ -1,0 +1,8 @@
+{
+  "name": "task-00008-tests",
+  "private": true,
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "resend": "^3.0.0"
+  }
+}
