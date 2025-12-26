@@ -14,9 +14,10 @@ Account and service setup organized Just-In-Time (JIT) by Task 6 phase. Only set
 **What you need to run Step 1 locally:**
 
 ### Convex Account
-- [ ] Create account at [convex.dev](https://convex.dev)
-- [ ] Run `npx convex login` to authenticate CLI
-- [ ] Verify with `npx convex projects`
+- [x] Create account at [convex.dev](https://convex.dev)
+- [x] Run `npx convex login` to authenticate CLI
+- [x] Run `npx convex dev` to provision deployment (mild-ptarmigan-109)
+- [x] Set `NEXT_PUBLIC_CONVEX_URL` environment variable in dashboard
 
 **That's it for Step 1.** Anonymous auth only needs Convex.
 
