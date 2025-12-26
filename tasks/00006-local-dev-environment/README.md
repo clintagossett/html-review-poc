@@ -1,6 +1,6 @@
 # Task 00006: Local & Hosted Dev Environment Setup
 
-**GitHub Issue:** #6
+**GitHub Issue:** #7
 
 ---
 
@@ -32,7 +32,9 @@ Before starting this task, complete the necessary account setup for each step:
 ## Resume (Start Here)
 
 **Last Updated:** 2025-12-26
-**Current Status:** ✅ STEP 1 COMPLETE
+**Current Status:** ✅ STEP 1 COMPLETE | STEP 2 DEFERRED
+
+**Note:** Step 2 (Magic Link Authentication) has been **deferred to a future task**. Focusing on password authentication (Task #7) first to establish core auth patterns before adding email-based flows.
 
 ### Step 1: Anonymous Authentication - ✅ COMPLETE
 
@@ -56,12 +58,15 @@ Before starting this task, complete the necessary account setup for each step:
 
 ### What This Task Is
 
-Set up working local and hosted development environments by building **two simple authentication flows** that prove the system works end-to-end across all deployment tiers:
+Set up working local development environment with anonymous authentication.
 
-1. **Step 1: Anonymous login** - Users can start using the app immediately, no email required
-2. **Step 2: Magic link login** - Users can provide email to enable collaboration features
+**Originally Planned:**
+1. ✅ Step 1: Anonymous login - COMPLETE
+2. ~~Step 2: Magic link login~~ - DEFERRED (see note below)
 
-**This is NOT about building a polished UI.** It's about proving the infrastructure works: local dev → hosted dev → staging.
+**Scope Change:** Magic link authentication (Step 2) has been **deferred to a future task**. This task now focuses solely on establishing the local dev environment with anonymous authentication working end-to-end.
+
+**Reason:** Prioritizing password authentication (Task #7) to establish core authentication patterns before adding email-based flows.
 
 ---
 
@@ -148,9 +153,11 @@ Per existing ADRs:
 
 ---
 
-## Step 2: Magic Link Authentication
+## Step 2: Magic Link Authentication - ⏸️ DEFERRED
 
-**Goal:** Users can provide email to unlock collaboration features.
+**Status:** Deferred to future task (post-password authentication)
+
+**Original Goal:** Users can provide email to unlock collaboration features.
 
 ### What Success Looks Like
 
@@ -249,9 +256,14 @@ vercel env add CONVEX_DEPLOY_KEY production
 
 ## What Comes Next
 
-1. **Task 00007: Basic Artifact Upload** - Prove file storage works
-2. **Task 00008: Progressive Disclosure UI** - "Upgrade to enable sharing" prompts
-3. **Task 00009: Landing Page** - Build polished UI from Figma
+**Immediate:**
+1. **Task #7: Password Authentication** - Username/password registration and login
+
+**Future:**
+2. Magic Link Authentication (deferred from this task)
+3. Basic Artifact Upload - Prove file storage works
+4. Progressive Disclosure UI - "Upgrade to enable sharing" prompts
+5. Landing Page - Build polished UI from Figma
 
 ---
 

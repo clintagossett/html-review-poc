@@ -139,7 +139,7 @@ Before implementing:
 
 ## Success Criteria
 
-- [x] All backend tests passing
+- [ ] All backend tests passing
 - [ ] All frontend tests passing
 - [ ] E2E test covering registration → login → dashboard
 - [ ] Validation trace generated

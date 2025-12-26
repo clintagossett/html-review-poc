@@ -38,7 +38,7 @@ Implement basic password authentication to allow users to create accounts and si
 ## Success Criteria
 
 ### Functional Requirements
-- [x] Users can register with unique username + password
+- [ ] Users can register with unique username + password
 - [ ] Users can sign in with correct credentials
 - [ ] Invalid credentials show appropriate error
 - [ ] Passwords are securely hashed (never stored in plaintext)
