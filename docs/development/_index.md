@@ -10,6 +10,7 @@ Operational instructions for AI-assisted development. These guides distill testi
 | [testing-guide.md](./testing-guide.md) | How to write and organize tests |
 | [TESTING-QUICK-START.md](./TESTING-QUICK-START.md) | **Quick setup for task-level E2E tests** |
 | [logging-guide.md](./logging-guide.md) | How to use structured logging |
+| [routing-patterns.md](./routing-patterns.md) | Next.js routing, pages vs components, SEO, auth redirects |
 
 ## Quick Start
 

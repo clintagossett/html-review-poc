@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { useQuery, Authenticated, Unauthenticated } from "convex/react";
 import { api } from "../../convex/_generated/api";
@@ -17,11 +18,7 @@ export default function Home() {
   const currentUser = useQuery(api.auth.getCurrentUser);
   const authTest = useQuery(api.simpleAuth.test);
 
-  console.log('[DEBUG] Current user:', currentUser);
-  console.log('[DEBUG] Auth test:', authTest);
-
   const handleAnonymousSignIn = async () => {
-    console.log('[DEBUG] Starting anonymous sign-in');
     await signIn("anonymous");
   };
 
@@ -56,6 +53,18 @@ export default function Home() {
             <Button onClick={handleAnonymousSignIn} size="lg">
               Start Using Artifact Review
             </Button>
+            <div className="flex flex-col gap-2 mt-2">
+              <Link href="/login">
+                <Button variant="outline" className="w-full">
+                  Sign In
+                </Button>
+              </Link>
+              <Link href="/register">
+                <Button variant="outline" className="w-full">
+                  Create Account
+                </Button>
+              </Link>
+            </div>
           </CardContent>
         </Card>
       </Unauthenticated>
