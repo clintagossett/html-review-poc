@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { useQuery, Authenticated, Unauthenticated } from "convex/react";
 import { api } from "../../convex/_generated/api";
@@ -12,15 +11,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { LandingHeader } from "@/components/landing/LandingHeader";
+import { HeroSection } from "@/components/landing/HeroSection";
 
 export default function Home() {
-  const { signIn, signOut } = useAuthActions();
+  const { signOut } = useAuthActions();
   const currentUser = useQuery(api.auth.getCurrentUser);
-  const authTest = useQuery(api.simpleAuth.test);
-
-  const handleAnonymousSignIn = async () => {
-    await signIn("anonymous");
-  };
 
   const handleSignOut = async () => {
     await signOut();
@@ -36,78 +32,59 @@ export default function Home() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-background to-muted">
+    <>
       <Unauthenticated>
-        <Card className="w-[400px]">
-          <CardHeader className="text-center">
-            <CardTitle className="text-3xl">Artifact Review</CardTitle>
-            <CardDescription>
-              Collaborative review for AI-generated artifacts
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-4">
-            <p className="text-sm text-muted-foreground text-center">
-              Start reviewing and sharing HTML artifacts instantly - no signup
-              required.
-            </p>
-            <Button onClick={handleAnonymousSignIn} size="lg">
-              Start Using Artifact Review
-            </Button>
-            <div className="flex flex-col gap-2 mt-2">
-              <Link href="/login">
-                <Button variant="outline" className="w-full">
-                  Sign In
-                </Button>
-              </Link>
-              <Link href="/register">
-                <Button variant="outline" className="w-full">
-                  Create Account
-                </Button>
-              </Link>
-            </div>
-          </CardContent>
-        </Card>
+        <div className="min-h-screen bg-white">
+          <LandingHeader />
+          <HeroSection />
+          {/* Placeholder for future sections (Subtasks 04-06) */}
+          <div className="bg-gray-50 py-16 text-center text-gray-500">
+            <p>Additional landing page sections coming soon...</p>
+          </div>
+        </div>
       </Unauthenticated>
 
       <Authenticated>
-        <Card className="w-[500px]">
-          <CardHeader>
-            <CardTitle>Welcome to Artifact Review</CardTitle>
-            <CardDescription>
-              {currentUser?.email ? `Signed in as ${currentUser.email}` : "Anonymous session"}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-4">
-            <div className="p-4 bg-muted rounded-lg space-y-2">
-              <div className="flex justify-between">
-                <span className="font-medium">User ID:</span>
-                <span className="text-sm text-muted-foreground font-mono">
-                  {currentUser?._id}
-                </span>
-              </div>
-              {currentUser?.email && (
+        <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-background to-muted">
+          <Card className="w-[500px]">
+            <CardHeader>
+              <CardTitle>Welcome to Artifact Review</CardTitle>
+              <CardDescription>
+                {currentUser?.email ? `Signed in as ${currentUser.email}` : "Anonymous session"}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-col gap-4">
+              <div className="p-4 bg-muted rounded-lg space-y-2">
                 <div className="flex justify-between">
-                  <span className="font-medium">Email:</span>
-                  <span className="text-sm text-muted-foreground">
-                    {currentUser.email}
+                  <span className="font-medium">User ID:</span>
+                  <span className="text-sm text-muted-foreground font-mono">
+                    {currentUser?._id}
                   </span>
                 </div>
-              )}
-            </div>
+                {currentUser?.email && (
+                  <div className="flex justify-between">
+                    <span className="font-medium">Email:</span>
+                    <span className="text-sm text-muted-foreground">
+                      {currentUser.email}
+                    </span>
+                  </div>
+                )}
+              </div>
 
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">
-                Your session persists across page refreshes. Try refreshing the
-                page to see your session maintained!
-              </p>
-            </div>
+              <div className="space-y-2">
+                <p className="text-sm text-muted-foreground">
+                  Your session persists across page refreshes. Try refreshing the
+                  page to see your session maintained!
+                </p>
+              </div>
 
-            <Button onClick={handleSignOut} variant="outline">
-              Sign Out
-            </Button>
-          </CardContent>
-        </Card>
+              <Button onClick={handleSignOut} variant="outline">
+                Sign Out
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
       </Authenticated>
-    </div>
+    </>
   );
 }
