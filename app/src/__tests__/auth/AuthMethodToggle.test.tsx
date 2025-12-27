@@ -96,4 +96,29 @@ describe("AuthMethodToggle", () => {
     await user.keyboard("{Enter}");
     expect(handleChange).toHaveBeenCalledWith("magic-link");
   });
+
+  // Layout tests for Bug Fix: Equal width tabs
+  describe("Layout - Equal Width Tabs", () => {
+    it("should render both buttons with equal width (50/50)", () => {
+      render(<AuthMethodToggle value="password" onChange={vi.fn()} />);
+
+      const passwordButton = screen.getByRole("button", { name: /password/i });
+      const magicLinkButton = screen.getByRole("button", { name: /magic link/i });
+
+      // Both buttons should have flex-1 class for equal width distribution
+      expect(passwordButton).toHaveClass("flex-1");
+      expect(magicLinkButton).toHaveClass("flex-1");
+    });
+
+    it("should have centered text in both buttons", () => {
+      render(<AuthMethodToggle value="password" onChange={vi.fn()} />);
+
+      const passwordButton = screen.getByRole("button", { name: /password/i });
+      const magicLinkButton = screen.getByRole("button", { name: /magic link/i });
+
+      // Both buttons should have justify-center for centered text
+      expect(passwordButton).toHaveClass("justify-center");
+      expect(magicLinkButton).toHaveClass("justify-center");
+    });
+  });
 });

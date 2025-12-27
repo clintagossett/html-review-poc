@@ -20,7 +20,7 @@ export function AuthMethodToggle({
         type="button"
         onClick={() => onChange("password")}
         className={cn(
-          "flex items-center justify-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all",
+          "flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all",
           value === "password"
             ? "bg-white text-gray-900 shadow-sm"
             : "text-gray-600 hover:text-gray-900"
@@ -33,7 +33,7 @@ export function AuthMethodToggle({
         type="button"
         onClick={() => onChange("magic-link")}
         className={cn(
-          "flex items-center justify-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all",
+          "flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all",
           value === "magic-link"
             ? "bg-white text-gray-900 shadow-sm"
             : "text-gray-600 hover:text-gray-900"

@@ -1,75 +1,92 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAuthActions } from "@convex-dev/auth/react";
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { DashboardHeader } from "@/components/artifacts/DashboardHeader";
+import { ArtifactList } from "@/components/artifacts/ArtifactList";
+import { EmptyState } from "@/components/artifacts/EmptyState";
+import { NewArtifactDialog } from "@/components/artifacts/NewArtifactDialog";
+import { useArtifactUpload } from "@/hooks/useArtifactUpload";
+import { ProtectedPage } from "@/components/auth/ProtectedPage";
+import type { Id } from "../../../convex/_generated/dataModel";
 
+/**
+ * Dashboard Page - Main dashboard view
+ */
 export default function DashboardPage() {
   const router = useRouter();
-  const { signOut } = useAuthActions();
   const currentUser = useQuery(api.users.getCurrentUser);
+  const artifacts = useQuery(api.artifacts.list);
+  const [isNewArtifactOpen, setIsNewArtifactOpen] = useState(false);
+  const { uploadFile } = useArtifactUpload();
 
-  const handleSignOut = async () => {
-    await signOut();
-    router.push("/");
+  const handleUploadClick = () => {
+    setIsNewArtifactOpen(true);
   };
 
-  // Loading state
-  if (currentUser === undefined) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p className="text-muted-foreground">Loading...</p>
-      </div>
-    );
-  }
+  const handleNewArtifact = () => {
+    setIsNewArtifactOpen(true);
+  };
 
-  // Not authenticated - redirect to home
-  if (currentUser === null) {
-    router.push("/");
-    return null;
-  }
+  const handleArtifactClick = (id: Id<"artifacts">) => {
+    // Navigate to artifact viewer
+    const artifact = artifacts?.find((a) => a._id === id);
+    if (artifact) {
+      router.push(`/a/${artifact.shareToken}`);
+    }
+  };
+
+  const handleCreateArtifact = async (data: {
+    file: File;
+    title: string;
+    description?: string;
+  }) => {
+    const result = await uploadFile(data);
+    // Navigate to the newly created artifact
+    router.push(`/a/${result.shareToken}`);
+  };
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4 bg-gradient-to-b from-background to-muted">
-      <Card className="w-[500px]">
-        <CardHeader>
-          <CardTitle>Welcome to Artifact Review</CardTitle>
-          <CardDescription>
-            {currentUser.email ? `Signed in as ${currentUser.email}` : "Signed in"}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="p-4 bg-muted rounded-lg space-y-2">
-            <div className="flex justify-between">
-              <span className="font-medium">User ID:</span>
-              <span className="text-sm text-muted-foreground font-mono">
-                {currentUser._id}
-              </span>
-            </div>
-            {currentUser.email && (
-              <div className="flex justify-between">
-                <span className="font-medium">Email:</span>
-                <span className="text-sm text-muted-foreground">
-                  {currentUser.email}
-                </span>
-              </div>
-            )}
-          </div>
+    <ProtectedPage>
+      {/* Loading state while data is fetching */}
+      {(currentUser === undefined || artifacts === undefined) && (
+        <div className="flex h-screen items-center justify-center">
+          <div className="text-gray-600">Loading...</div>
+        </div>
+      )}
 
-          <Button onClick={handleSignOut} variant="outline" className="w-full">
-            Sign Out
-          </Button>
-        </CardContent>
-      </Card>
-    </div>
+      {/* Dashboard content */}
+      {currentUser !== undefined && artifacts !== undefined && (
+        <div className="min-h-screen bg-gray-50">
+          <DashboardHeader
+            onUploadClick={handleUploadClick}
+            onInviteClick={() => console.log("Invite clicked")}
+            userEmail={currentUser.email}
+            userName={currentUser.name}
+          />
+
+          <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+            {artifacts.length === 0 ? (
+              <EmptyState onCreateFirst={handleNewArtifact} />
+            ) : (
+              <ArtifactList
+                artifacts={artifacts}
+                versionsMap={{}}
+                onArtifactClick={handleArtifactClick}
+                onNewArtifact={handleNewArtifact}
+              />
+            )}
+          </main>
+
+          <NewArtifactDialog
+            open={isNewArtifactOpen}
+            onOpenChange={setIsNewArtifactOpen}
+            onCreateArtifact={handleCreateArtifact}
+          />
+        </div>
+      )}
+    </ProtectedPage>
   );
 }

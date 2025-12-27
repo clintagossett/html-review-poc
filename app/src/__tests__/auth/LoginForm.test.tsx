@@ -83,12 +83,13 @@ describe("LoginForm", () => {
       expect(submitButton).toHaveClass("bg-gradient-to-r");
     });
 
-    it("should display DemoCredentialsPanel in password mode", () => {
+    it("should NOT display demo credentials in password mode", () => {
       render(<LoginForm onSuccess={mockOnSuccess} />);
 
-      expect(screen.getByText("Demo Account")).toBeInTheDocument();
-      expect(screen.getByText("test@example.com")).toBeInTheDocument();
-      expect(screen.getByText("password123")).toBeInTheDocument();
+      // Bug Fix: Demo credentials should be removed from production
+      expect(screen.queryByText("Demo Account")).not.toBeInTheDocument();
+      expect(screen.queryByText("test@example.com")).not.toBeInTheDocument();
+      expect(screen.queryByText("password123")).not.toBeInTheDocument();
     });
 
     it("should display sign up link at bottom", () => {
@@ -140,14 +141,14 @@ describe("LoginForm", () => {
       expect(screen.getByLabelText(/^password$/i)).toBeInTheDocument();
     });
 
-    it("should not show DemoCredentialsPanel in magic link mode", async () => {
+    it("should not show demo credentials in magic link mode", async () => {
       const user = userEvent.setup();
       render(<LoginForm onSuccess={mockOnSuccess} />);
 
       // Switch to magic link mode
       await user.click(screen.getByRole("button", { name: /magic link/i }));
 
-      // Demo panel should not be visible (check for unique demo panel text)
+      // Bug Fix: Demo credentials removed entirely, so still not visible
       expect(screen.queryByText("Demo Account")).not.toBeInTheDocument();
     });
 

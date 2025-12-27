@@ -9,7 +9,6 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { GradientLogo } from "@/components/shared/GradientLogo";
 import { IconInput } from "@/components/shared/IconInput";
 import { AuthMethodToggle } from "./AuthMethodToggle";
-import { DemoCredentialsPanel } from "./DemoCredentialsPanel";
 import { LogIn, Mail, Lock, ArrowRight, AlertCircle, Sparkles } from "lucide-react";
 
 interface LoginFormProps {
@@ -255,11 +254,6 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
             </>
           )}
         </Button>
-
-        {/* Demo Credentials (only in password mode) */}
-        {authMethod === "password" && (
-          <DemoCredentialsPanel email="test@example.com" password="password123" />
-        )}
 
         {/* Sign Up Link */}
         <div className="text-center">
