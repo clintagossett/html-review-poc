@@ -58,18 +58,31 @@ Before Phase 3-4:
 1. Verify `getAuthSessionId` API from Convex Auth
 2. Research password update mechanism in Convex Auth
 
-## Open Questions (For User Decision)
+## User Decisions (COMPLETED)
 
-1. **Email Template Approach** - Use distinct forgot password email or reuse standard magic link?
-2. **Debug Toggle in Production** - Remove completely or feature flag?
-3. **Password Strength Requirements** - Min 8 chars only, or add strength meter?
+All open questions have been answered:
+
+1. **Email Template Approach** - ✅ **Reuse standard magic link** (no custom template initially)
+2. **Debug Toggle in Production** - ✅ **Remove completely** (via `process.env.NODE_ENV` check)
+3. **Password Validation** - ✅ **Reuse existing standard** from RegisterForm:
+   - At least 8 characters
+   - Contains a number
+   - Contains a letter
+   - Use `PasswordStrengthIndicator` component
+   - Use requirements checklist pattern
+
+See [DECISIONS.md](./DECISIONS.md) for complete rationale.
 
 ## Next Steps
 
-1. Hand off to TDD Developer for Phase 1 implementation
-2. Conduct technical research before Phase 3
+1. ✅ All questions answered - ready for implementation
+2. Hand off to TDD Developer for Phase 1 implementation
+3. Conduct technical research before Phase 3:
+   - Verify `getAuthSessionId` API from Convex Auth
+   - Research password update mechanism in Convex Auth
 
 ## Files Created
 
 - `ARCHITECTURE.md` - Full system design and technical decisions
 - `PHASED-PLAN.md` - Detailed 6-phase implementation roadmap
+- `DECISIONS.md` - User decisions and component reuse strategy

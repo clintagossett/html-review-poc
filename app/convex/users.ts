@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import { query } from "./_generated/server";
+import { query, mutation } from "./_generated/server";
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { createLogger, Topics } from "./lib/logger";
 
@@ -136,5 +136,51 @@ export const getByUsername = query({
       name: user.name,
       isAnonymous: user.isAnonymous,
     };
+  },
+});
+
+/**
+ * Update the current user's display name.
+ */
+export const updateName = mutation({
+  args: {
+    name: v.string(),
+  },
+  returns: v.null(),
+  handler: async (ctx, args) => {
+    log.debug(Topics.User, "updateName called", { name: args.name });
+
+    // Require authentication
+    const userId = await getAuthUserId(ctx);
+    if (!userId) {
+      log.warn(Topics.Auth, "Attempted to update name without authentication");
+      throw new Error("Not authenticated");
+    }
+
+    // Validate name
+    const trimmedName = args.name.trim();
+
+    if (!trimmedName) {
+      log.warn(Topics.User, "Attempted to set empty name", { userId: userId.toString() });
+      throw new Error("Name cannot be empty");
+    }
+
+    if (trimmedName.length > 100) {
+      log.warn(Topics.User, "Attempted to set name too long", {
+        userId: userId.toString(),
+        length: trimmedName.length,
+      });
+      throw new Error("Name too long (max 100 characters)");
+    }
+
+    // Update user
+    await ctx.db.patch(userId, { name: trimmedName });
+
+    log.info(Topics.User, "User name updated", {
+      userId: userId.toString(),
+      newName: trimmedName,
+    });
+
+    return null;
   },
 });

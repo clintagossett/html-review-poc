@@ -70,9 +70,20 @@ describe("LoginForm", () => {
     it("should display 'Forgot password?' link in password mode", () => {
       render(<LoginForm onSuccess={mockOnSuccess} />);
 
-      const forgotLink = screen.getByText(/forgot password/i);
+      const forgotLink = screen.getByRole("link", { name: /forgot password/i });
       expect(forgotLink).toBeInTheDocument();
-      expect(forgotLink.tagName).toBe("A");
+      expect(forgotLink).toHaveAttribute("href", "/forgot-password");
+    });
+
+    it("should NOT display 'Forgot password?' link in magic link mode", async () => {
+      const user = userEvent.setup();
+      render(<LoginForm onSuccess={mockOnSuccess} />);
+
+      // Switch to magic link mode
+      await user.click(screen.getByRole("button", { name: /magic link/i }));
+
+      // Forgot password link should not be visible
+      expect(screen.queryByRole("link", { name: /forgot password/i })).not.toBeInTheDocument();
     });
 
     it("should display Sign In button with gradient background", () => {
